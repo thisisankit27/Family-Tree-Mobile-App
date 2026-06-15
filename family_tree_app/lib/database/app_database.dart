@@ -44,6 +44,8 @@ DatabaseConnection _openConnection() {
   return DatabaseConnection.delayed(Future(() async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File(p.join(dir.path, 'family_tree.sqlite'));
-    return NativeDatabase.createInBackground(file, logStatements: false);
+    return DatabaseConnection(
+      NativeDatabase.createInBackground(file, logStatements: false),
+    );
   }));
 }

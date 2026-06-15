@@ -9,6 +9,7 @@ import '../../../tree/domain/entities/family_tree_entity.dart';
 import '../../../member/data/repositories/person_repository_impl.dart';
 import '../../../member/domain/entities/person_entity.dart';
 import '../../../relationship/data/repositories/relationship_repository_impl.dart';
+import '../../../relationship/domain/entities/relationship_entity.dart';
 import '../../../export_import/data/export_service.dart';
 
 // ─── Infrastructure ───────────────────────────────────────────────────────────

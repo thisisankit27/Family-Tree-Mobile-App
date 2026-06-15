@@ -119,7 +119,7 @@ class _ExportImportScreenState extends ConsumerState<ExportImportScreen> {
     });
 
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['json'],
         dialogTitle: 'Select a Family Tree backup (.json)',
@@ -176,9 +176,10 @@ class _ExportImportScreenState extends ConsumerState<ExportImportScreen> {
         description: importData.tree.description,
       );
 
-      // Import persons
+      // Import persons and keep a map from backup IDs to newly created IDs.
+      final personIdMap = <String, String>{};
       for (final p in importData.persons) {
-        await personRepo.createPerson(
+        final importedPerson = await personRepo.createPerson(
           treeId: tree.id,
           firstName: p.firstName,
           middleName: p.middleName,
@@ -193,23 +194,32 @@ class _ExportImportScreenState extends ConsumerState<ExportImportScreen> {
           deathDateApprox: p.deathDateApprox,
           birthPlace: p.birthPlace,
           deathPlace: p.deathPlace,
+          currentLocation: p.currentLocation,
           occupation: p.occupation,
           biography: p.biography,
           nationality: p.nationality,
+          education: p.education,
           email: p.email,
           phone: p.phone,
           address: p.address,
+          website: p.website,
+          profilePhotoPath: p.profilePhotoPath,
         );
+        personIdMap[p.id] = importedPerson.id;
       }
 
       // Import relationships
       for (final r in importData.relationships) {
         try {
+          final personId = personIdMap[r.personId];
+          final relatedPersonId = personIdMap[r.relatedPersonId];
+          if (personId == null || relatedPersonId == null) continue;
+
           if (r.relationshipType.value == 'PARENT_OF') {
             await relRepo.addParentChildRelationship(
               treeId: tree.id,
-              parentId: r.personId,
-              childId: r.relatedPersonId,
+              parentId: personId,
+              childId: relatedPersonId,
               subType: r.subType != null
                   ? ParentSubType.fromValue(r.subType!)
                   : ParentSubType.biological,
@@ -217,8 +227,8 @@ class _ExportImportScreenState extends ConsumerState<ExportImportScreen> {
           } else if (r.relationshipType.value == 'SPOUSE_OF') {
             await relRepo.addSpouseRelationship(
               treeId: tree.id,
-              personAId: r.personId,
-              personBId: r.relatedPersonId,
+              personAId: personId,
+              personBId: relatedPersonId,
               subType: r.subType != null
                   ? SpouseSubType.fromValue(r.subType!)
                   : SpouseSubType.married,

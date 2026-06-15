@@ -3,7 +3,8 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../member/domain/entities/person_entity.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../member/domain/entities/person_entity.dart';
 import '../models/tree_node_model.dart';
 
 class TreeCanvas extends StatelessWidget {

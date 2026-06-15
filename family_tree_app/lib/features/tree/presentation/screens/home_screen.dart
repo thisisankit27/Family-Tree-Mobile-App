@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../../../shared/widgets/person_avatar.dart';
+import '../../../member/domain/entities/person_entity.dart';
 import '../../domain/entities/family_tree_entity.dart';
 import '../providers/providers.dart';
 

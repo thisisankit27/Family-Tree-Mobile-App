@@ -6,9 +6,9 @@ import 'package:path/path.dart' as p;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../../../core/constants/app_constants.dart';
-import '../../../member/domain/entities/person_entity.dart';
-import '../../../relationship/domain/entities/relationship_entity.dart';
-import '../../../tree/domain/entities/family_tree_entity.dart';
+import '../../member/domain/entities/person_entity.dart';
+import '../../relationship/domain/entities/relationship_entity.dart';
+import '../../tree/domain/entities/family_tree_entity.dart';
 
 class ExportService {
   // ── JSON Export ───────────────────────────────────────────────────────────
@@ -18,18 +18,20 @@ class ExportService {
     required List<PersonEntity> persons,
     required List<RelationshipEntity> relationships,
   }) {
+    final exportedRelationships = relationships
+        .where((RelationshipEntity r) =>
+            r.relationshipType == RelationshipType.parentOf ||
+            r.relationshipType == RelationshipType.spouseOf)
+        .map<Map<String, dynamic>>((RelationshipEntity r) => r.toJson())
+        .toList();
+
     final data = {
       'schema_version': AppConstants.jsonSchemaVersion,
       'exported_at': DateTime.now().toIso8601String(),
       'app_version': AppConstants.appVersion,
       'tree': tree.toJson(),
       'persons': persons.map((p) => p.toJson()).toList(),
-      'relationships': relationships
-          .where((r) =>
-              r.relationshipType == RelationshipType.parentOf ||
-              r.relationshipType == RelationshipType.spouseOf)
-          .map((r) => r.toJson())
-          .toList(),
+      'relationships': exportedRelationships,
     };
     return const JsonEncoder.withIndent('  ').convert(data);
   }

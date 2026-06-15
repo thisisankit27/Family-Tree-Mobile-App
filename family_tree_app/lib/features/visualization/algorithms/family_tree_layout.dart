@@ -1,7 +1,7 @@
 // lib/features/visualization/algorithms/family_tree_layout.dart
-import '../../../member/domain/entities/person_entity.dart';
-import '../../../relationship/domain/entities/relationship_entity.dart';
-import '../../../tree/presentation/providers/providers.dart';
+import '../../member/domain/entities/person_entity.dart';
+import '../../relationship/domain/entities/relationship_entity.dart';
+import '../../tree/presentation/providers/providers.dart';
 import '../models/tree_node_model.dart';
 import '../../../../core/constants/app_constants.dart';
 

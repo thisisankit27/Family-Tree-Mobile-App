@@ -1,6 +1,6 @@
 // lib/features/visualization/models/tree_node_model.dart
 import 'dart:ui';
-import '../../../member/domain/entities/person_entity.dart';
+import '../../member/domain/entities/person_entity.dart';
 
 enum EdgeType { parentChild, spouse }
 
